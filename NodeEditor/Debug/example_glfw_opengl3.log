@@ -1,0 +1,24 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: The intermediate directory (G:\Uni\Masters\example_glfw_opengl3\Debug\) contains files shared from another project (example_glfw_opengl3.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  imgui.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\imgui.cpp': No such file or directory
+  imgui_demo.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\imgui_demo.cpp': No such file or directory
+  imgui_draw.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\imgui_draw.cpp': No such file or directory
+  imgui_tables.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\imgui_tables.cpp': No such file or directory
+  imgui_widgets.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\imgui_widgets.cpp': No such file or directory
+  imgui_impl_glfw.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\backends\imgui_impl_glfw.cpp': No such file or directory
+  imgui_impl_opengl3.cpp
+c1xx : fatal error C1083: Cannot open source file: '..\..\backends\imgui_impl_opengl3.cpp': No such file or directory
+  Attribute.cpp
+  main.cpp
+G:\Uni\Masters\example_glfw_opengl3\main.cpp(1,10): fatal error C1083: Cannot open include file: 'imgui.h': No such file or directory
+  imnodes.cpp
+G:\Uni\Masters\example_glfw_opengl3\imnodes.cpp(14,10): fatal error C1083: Cannot open include file: 'imgui.h': No such file or directory
+  Node.cpp
+G:\Uni\Masters\example_glfw_opengl3\Node.cpp(2,10): fatal error C1083: Cannot open include file: 'imgui.h': No such file or directory
+  Value.cpp
+  Generating Code...
