@@ -1,0 +1,9 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: The intermediate directory (G:\Includes\imgui-1.81\examples\example_glfw_opengl3\Debug\) contains files shared from another project (example_glfw_opengl3.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  main.cpp
+G:\Includes\imgui-1.81\examples\example_glfw_opengl3\main.cpp(168,80): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+G:\Includes\imgui-1.81\examples\example_glfw_opengl3\main.cpp(168,64): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+G:\Includes\imgui-1.81\examples\example_glfw_opengl3\main.cpp(175,27): warning C4018: '<': signed/unsigned mismatch
+  Node.cpp
+  Value.cpp
+  Generating Code...
+  example_glfw_opengl3.vcxproj -> G:\Includes\imgui-1.81\examples\example_glfw_opengl3\Debug\Masters.exe
