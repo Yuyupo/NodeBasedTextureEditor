@@ -84,7 +84,7 @@ int main(int, char**)
     }
 
     // Initialize the editor
-    Editor editor(glsl_version, window);
+    Editor::init(glsl_version, window);
 
     // Our state
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -100,8 +100,8 @@ int main(int, char**)
     {
         glfwPollEvents();
 
-        editor.drawNodes();
-        editor.handleEvents();
+        Editor::drawNodes();
+        Editor::handleEvents();
 
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -114,6 +114,7 @@ int main(int, char**)
     }
 
     // Cleanup
+    Editor::cleanUp();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     imnodes::Shutdown();

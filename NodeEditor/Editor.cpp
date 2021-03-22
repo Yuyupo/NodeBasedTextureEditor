@@ -9,22 +9,9 @@
 #include "Node.h"
 #include "Editor.h"
 
-Editor::Editor(const char* glsl_version, GLFWwindow* window)
-{
-    init(glsl_version, window);
-
-    Node* n = new Node("Output", AttributeType::NONE);
-    n->addInput("Color", AttributeType::COLOR3);
-    addNode(n);
-}
-
-Editor::~Editor()
-{
-    for (Node* node : m_nodes)
-    {
-        delete node;
-    }
-}
+std::vector<Attribute*> Editor::m_attributes;
+std::vector<Node*> Editor::m_nodes;
+std::vector<std::pair<int, int>> Editor::m_links;
 
 void Editor::drawNodes()
 {
@@ -43,16 +30,16 @@ void Editor::drawNodes()
         ImGui::TextUnformatted(node->getName().c_str());
         imnodes::EndNodeTitleBar();
 
-        for (Attribute& inputAttr : node->getInputs())
+        for (Attribute* inputAttr : node->getInputs())
         {
-            imnodes::BeginInputAttribute(inputAttr.getID());
-            ImGui::Text(inputAttr.getName().c_str());
+            imnodes::BeginInputAttribute(inputAttr->getID());
+            ImGui::Text(inputAttr->getName().c_str());
             imnodes::EndInputAttribute();
         }
 
-        if (node->getOutput().getType() != AttributeType::NONE)
+        if (node->getOutput()->getType() != AttributeType::NONE)
         {
-            imnodes::BeginOutputAttribute(node->getOutput().getID());
+            imnodes::BeginOutputAttribute(node->getOutput()->getID());
             imnodes::EndOutputAttribute();
         }
 
@@ -85,6 +72,12 @@ void Editor::addLink(int attribute1, int attribute2)
     m_links.push_back(std::make_pair(attribute1, attribute2));
 }
 
+Attribute* Editor::createAttribute(std::string name, AttributeType type)
+{
+    m_attributes.push_back(new Attribute(m_attributes.size(), name, type));
+    return m_attributes.back();
+}
+
 void Editor::handleEvents()
 {
     //TODO : optimize this (Y)
@@ -93,6 +86,13 @@ void Editor::handleEvents()
     {
         std::cout << "New link: start:" << start_attr << ", end:" << end_attr << std::endl;
         addLink(start_attr, end_attr);
+
+        if (end_attr == 1)
+        {
+            Color3 col1 = m_attributes[start_attr]->getParent()->createOutput().asColor3();
+            std::cout << m_attributes[start_attr]->getParent()->getName();
+            std::cout << "\tColor chosen R:" << (int)(col1.r * 255.f) << " G:" << (int)(col1.g * 255.f) << " B:" << (int)(col1.b * 255.f) << std::endl;
+        }
 
         //if (start_attr == 2 && end_attr == 1) {
             //std::cout << "\tColor chosen R:" << (int)(col1[0] * 255.f) << " G:" << (int)(col1[1] * 255.f) << " B:" << (int)(col1[2] * 255.f) << std::endl;
@@ -110,7 +110,6 @@ void Editor::handleEvents()
     // TODO: KeyReleased
     if ((GetKeyState('C') & 0x8000))
     {
-        addNode(new Node("kutya", AttributeType::NONE));
         addNode(new ColorPicker());
     }
 }
@@ -129,4 +128,16 @@ void Editor::init(const char* glsl_version, GLFWwindow* window)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
     imnodes::Initialize();
+
+    Node* n = new Node("Output", AttributeType::NONE);
+    n->addInput("Color", AttributeType::COLOR3);
+    addNode(n);
+}
+
+void Editor::cleanUp()
+{
+    for (Node* node : m_nodes)
+    {
+        delete node;
+    }
 }

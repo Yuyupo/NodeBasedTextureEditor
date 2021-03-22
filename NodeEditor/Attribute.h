@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+class Node;
+
 enum class AttributeType
 {
     NONE,
@@ -10,14 +12,16 @@ enum class AttributeType
 class Attribute
 {
 public:
-    Attribute(std::string attributeName, AttributeType type);
+    Attribute(int id, std::string attributeName, AttributeType type);
     int getID();
     AttributeType getType();
     std::string getName();
+    void setParent(Node* node);
+    Node* getParent();
 
 private:
+    Node* m_parent;
     AttributeType m_type;
-    static int m_counter;
     int m_id;
     std::string m_name;
 };

@@ -10,8 +10,8 @@ public:
     Node(std::string nodeName, AttributeType outputType);
     int getID();
     std::string getName();
-    std::vector<Attribute>& getInputs();
-    Attribute& getOutput();
+    std::vector<Attribute*>& getInputs();
+    Attribute* getOutput();
     void addInput(std::string attributeName, AttributeType type);
 
     virtual void createContent();
@@ -21,6 +21,6 @@ private:
     static int m_counter;
     int m_id;
     std::string m_name;
-    std::vector<Attribute> m_inputs;
-    Attribute m_output;
+    std::vector<Attribute*> m_inputs;
+    Attribute* m_output;
 };

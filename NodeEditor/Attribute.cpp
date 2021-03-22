@@ -1,12 +1,10 @@
 #include "Attribute.h"
 
-int Attribute::m_counter = 10;
-
-Attribute::Attribute(std::string attributeName, AttributeType type)
+Attribute::Attribute(int id, std::string attributeName, AttributeType type)
 {
-    m_id = ++m_counter;
+    m_id = id;
+    m_parent = nullptr;
     m_type = type;
-    m_name = attributeName;
 }
 
 int Attribute::getID()
@@ -22,6 +20,16 @@ AttributeType Attribute::getType()
 std::string Attribute::getName()
 {
     return m_name;
+}
+
+void Attribute::setParent(Node* node)
+{
+    m_parent = node;
+}
+
+Node* Attribute::getParent()
+{
+    return m_parent;
 }
 
 
