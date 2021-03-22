@@ -1,2 +1,0 @@
-G:\Includes\imgui-1.81\examples\example_glfw_opengl3\Debug\Masters.exe
-G:\Includes\imgui-1.81\examples\example_glfw_opengl3\Debug\Masters.pdb

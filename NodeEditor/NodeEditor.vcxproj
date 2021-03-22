@@ -157,6 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Attribute.cpp" />
+    <ClCompile Include="ColorPicker.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="libs\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="libs\backends\imgui_impl_opengl3.cpp" />
@@ -173,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Attribute.h" />
+    <ClInclude Include="ColorPicker.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="libs\backends\imgui_impl_glfw.h" />
     <ClInclude Include="libs\backends\imgui_impl_opengl3.h" />

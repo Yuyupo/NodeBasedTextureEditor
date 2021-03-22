@@ -37,7 +37,6 @@ void Node::addInput(std::string attributeName, AttributeType type)
 
 void Node::createContent()
 {
-    ImGui::Text("kutyacica");
 }
 
 Value Node::createOutput()

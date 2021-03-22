@@ -16,6 +16,7 @@ public:
 
     virtual void createContent();
     virtual Value createOutput();
+
 private:
     static int m_counter;
     int m_id;

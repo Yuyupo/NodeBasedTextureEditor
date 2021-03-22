@@ -4,12 +4,18 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "imnodes.h"
+
+#include "ColorPicker.h"
 #include "Node.h"
 #include "Editor.h"
 
 Editor::Editor(const char* glsl_version, GLFWwindow* window)
 {
     init(glsl_version, window);
+
+    Node* n = new Node("Output", AttributeType::NONE);
+    n->addInput("Color", AttributeType::COLOR3);
+    addNode(n);
 }
 
 Editor::~Editor()
@@ -81,6 +87,7 @@ void Editor::addLink(int attribute1, int attribute2)
 
 void Editor::handleEvents()
 {
+    //TODO : optimize this (Y)
     int start_attr, end_attr;
     if (imnodes::IsLinkCreated(&start_attr, &end_attr))
     {
@@ -100,16 +107,11 @@ void Editor::handleEvents()
         std::cout << "Remaining links: " << m_links.size() << std::endl;
     }
 
-    // released
-    if ((GetKeyState('N') & 0x8000))
+    // TODO: KeyReleased
+    if ((GetKeyState('C') & 0x8000))
     {
         addNode(new Node("kutya", AttributeType::NONE));
-
-        Node* a = new Node("macska", AttributeType::COLOR3);
-        a->addInput("hulululu", AttributeType::COLOR3);
-        addNode(a);
-
-        //std::cout << "\tColor R:" << (int)(col1[0] * 255.f) << " G:" << (int)(col1[1] * 255.f) << " B:" << (int)(col1[2] * 255.f) << std::endl;
+        addNode(new ColorPicker());
     }
 }
 

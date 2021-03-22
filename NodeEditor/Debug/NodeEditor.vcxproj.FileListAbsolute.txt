@@ -1,2 +1,0 @@
-G:\Uni\Masters\NodeEditor\Debug\NodeEditor.exe
-G:\Uni\Masters\NodeEditor\Debug\NodeEditor.pdb

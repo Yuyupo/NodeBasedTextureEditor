@@ -52,6 +52,9 @@
     <ClCompile Include="libs\imgui\imgui_widgets.cpp">
       <Filter>includes</Filter>
     </ClCompile>
+    <ClCompile Include="ColorPicker.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Node.h">
@@ -102,6 +105,7 @@
     <ClInclude Include="Editor.h">
       <Filter>sources</Filter>
     </ClInclude>
+    <ClInclude Include="ColorPicker.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="C:\Users\Yuyupo\Downloads\MyImage01.jpg">
