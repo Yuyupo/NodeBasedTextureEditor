@@ -5,6 +5,9 @@
       <UniqueIdentifier>{f18ab499-84e1-499f-8eff-9754361e0e52}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="includes">
+      <UniqueIdentifier>{e33ef2d7-13dd-4645-87e7-d2bd59b5a1da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -19,32 +22,35 @@
     <ClCompile Include="Value.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="libs\gl3w\GL\gl3w.c">
+    <ClCompile Include="Editor.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="libs\imnodes\imnodes.cpp">
-      <Filter>sources</Filter>
+    <ClCompile Include="libs\gl3w\GL\gl3w.c">
+      <Filter>includes</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui.cpp">
-      <Filter>sources</Filter>
+      <Filter>includes</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_demo.cpp">
-      <Filter>sources</Filter>
+      <Filter>includes</Filter>
     </ClCompile>
     <ClCompile Include="libs\imgui\imgui_draw.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\imgui\imgui_tables.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="libs\imgui\imgui_widgets.cpp">
-      <Filter>sources</Filter>
+      <Filter>includes</Filter>
     </ClCompile>
     <ClCompile Include="libs\backends\imgui_impl_glfw.cpp">
-      <Filter>sources</Filter>
+      <Filter>includes</Filter>
     </ClCompile>
     <ClCompile Include="libs\backends\imgui_impl_opengl3.cpp">
-      <Filter>sources</Filter>
+      <Filter>includes</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_tables.cpp">
+      <Filter>includes</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imnodes\imnodes.cpp">
+      <Filter>includes</Filter>
+    </ClCompile>
+    <ClCompile Include="libs\imgui\imgui_widgets.cpp">
+      <Filter>includes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,18 +63,45 @@
     <ClInclude Include="Value.h">
       <Filter>sources</Filter>
     </ClInclude>
-    <ClInclude Include="libs\gl3w\GL\gl3w.h" />
-    <ClInclude Include="libs\gl3w\GL\glcorearb.h" />
-    <ClInclude Include="libs\imnodes\imnodes.h" />
-    <ClInclude Include="libs\imnodes\stb_image.h" />
-    <ClInclude Include="libs\imgui\imconfig.h" />
-    <ClInclude Include="libs\imgui\imgui.h" />
-    <ClInclude Include="libs\imgui\imgui_internal.h" />
-    <ClInclude Include="libs\imgui\imstb_rectpack.h" />
-    <ClInclude Include="libs\imgui\imstb_textedit.h" />
-    <ClInclude Include="libs\imgui\imstb_truetype.h" />
-    <ClInclude Include="libs\backends\imgui_impl_glfw.h" />
-    <ClInclude Include="libs\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="libs\imgui\imstb_rectpack.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imnodes\imnodes.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui_internal.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\backends\imgui_impl_opengl3.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\backends\imgui_impl_glfw.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imgui.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imconfig.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\gl3w\GL\glcorearb.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\gl3w\GL\gl3w.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imstb_textedit.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imgui\imstb_truetype.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\imnodes\stb_image.h">
+      <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor.h">
+      <Filter>sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="C:\Users\Yuyupo\Downloads\MyImage01.jpg">
@@ -76,6 +109,8 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="libs\imgui\imgui.ini" />
+    <None Include="libs\imgui\imgui.ini">
+      <Filter>includes</Filter>
+    </None>
   </ItemGroup>
 </Project>

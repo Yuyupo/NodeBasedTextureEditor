@@ -1,10 +1,11 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: The intermediate directory (G:\Uni\Masters\NodeEditor\Debug\) contains files shared from another project (example_glfw_opengl3.vcxproj, Masters.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  imgui_impl_glfw.cpp
-  imgui_impl_opengl3.cpp
-  imgui.cpp
-  imgui_demo.cpp
-  imgui_draw.cpp
-  imgui_tables.cpp
-  imgui_widgets.cpp
+  Editor.cpp
+G:\Uni\Masters\NodeEditor\Editor.cpp(58,23): warning C4018: '<': signed/unsigned mismatch
+  Node.cpp
+  main.cpp
+G:\Uni\Masters\NodeEditor\main.cpp(96,12): warning C4189: 'my_color_texture': local variable is initialized but not referenced
+G:\Uni\Masters\NodeEditor\main.cpp(93,9): warning C4189: 'my_image_width': local variable is initialized but not referenced
+G:\Uni\Masters\NodeEditor\main.cpp(95,12): warning C4189: 'my_image_texture': local variable is initialized but not referenced
+G:\Uni\Masters\NodeEditor\main.cpp(94,9): warning C4189: 'my_image_height': local variable is initialized but not referenced
   Generating Code...
   NodeEditor.vcxproj -> G:\Uni\Masters\NodeEditor\Debug\NodeEditor.exe

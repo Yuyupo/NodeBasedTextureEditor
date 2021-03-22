@@ -30,6 +30,11 @@ Attribute& Node::getOutput()
     return m_output;
 }
 
+void Node::addInput(std::string attributeName, AttributeType type)
+{
+    m_inputs.emplace_back(attributeName, type);
+}
+
 void Node::createContent()
 {
     ImGui::Text("kutyacica");

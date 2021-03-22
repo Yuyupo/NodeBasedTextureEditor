@@ -11,6 +11,7 @@
 
 #include "Node.h"
 #include "Attribute.h"
+#include "Editor.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -82,23 +83,12 @@ int main(int, char**)
         return 1;
     }
 
-    // Setup Dear ImGui context
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-
-    // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
-    imnodes::Initialize();
+    // Initialize the editor
+    Editor editor(glsl_version, window);
 
     // Our state
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    std::vector<Node> nodes;
-    std::vector<std::pair<int, int>> links;
+
     static float col1[3] = { 0.f, 0.f, 0.f };
     int my_image_width = 0;
     int my_image_height = 0;
@@ -110,136 +100,9 @@ int main(int, char**)
     {
         glfwPollEvents();
 
-        // Start the Dear ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        editor.drawNodes();
+        editor.handleEvents();
 
-        ImGui::Begin("Material editor");
-        imnodes::BeginNodeEditor();
-
-        // First node
-        imnodes::BeginNode(1);
-        imnodes::BeginNodeTitleBar();
-        ImGui::TextUnformatted("Output");
-        imnodes::EndNodeTitleBar();
-
-        // Color attribute
-        imnodes::BeginInputAttribute(1);
-        ImGui::Text("Color");
-        //ehhez hozzáadni a texturecolorbuffer id-t
-        ImGui::Image((void*)(intptr_t)my_color_texture, ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-        imnodes::EndInputAttribute();
-
-        //Texture attribute
-        imnodes::BeginInputAttribute(4);
-        ImGui::Text("Texture");
-        imnodes::EndInputAttribute();
-        imnodes::EndNode();
-        //First node end
-
-        //Second node
-        imnodes::BeginNode(2);
-        imnodes::BeginNodeTitleBar();
-        ImGui::TextUnformatted("Color picker");
-        imnodes::EndNodeTitleBar();
-
-        imnodes::BeginOutputAttribute(2);
-        ImGui::ColorEdit3("Color", col1);
-        imnodes::EndOutputAttribute();
-        imnodes::EndNode();
-        //Second node end
-
-        //Third node
-        imnodes::BeginNode(3);
-        imnodes::BeginNodeTitleBar();
-        ImGui::TextUnformatted("2D Texture loader");
-        imnodes::EndNodeTitleBar();
-
-        imnodes::BeginOutputAttribute(3);
-        imnodes::EndOutputAttribute();
-        static char str0[128] = "";
-        // C:\\Users\\Yuyupo\\Downloads\\MyImage01.jpg
-
-        if (ImGui::InputText("Full path", str0, IM_ARRAYSIZE(str0))) {
-            std::cout << "Load texture called with path: " << str0 << std::endl;
-            LoadTextureFromFile(str0, &my_image_texture, &my_image_width, &my_image_height);
-        }
-        ImGui::Image((void*)(intptr_t)my_image_texture, ImVec2(my_image_width, my_image_height));
-
-        ImGui::Text("pointer = %p", my_image_texture);
-        ImGui::Text("size = %d x %d", my_image_width, my_image_height);
-        imnodes::EndNode();
-        //Third node end
-
-        for (int i = 0; i < links.size(); ++i)
-        {
-            const std::pair<int, int> p = links[i];
-            // in this case, we just use the array index of the link
-            // as the unique identifier
-            imnodes::Link(i, p.first, p.second);
-        }
-
-        for (Node& node : nodes)
-        {
-            imnodes::BeginNode(node.getID());
-            imnodes::BeginNodeTitleBar();
-            ImGui::TextUnformatted(node.getName().c_str());
-            imnodes::EndNodeTitleBar();
-
-            for (Attribute& inputAttr : node.getInputs())
-            {
-                imnodes::BeginInputAttribute(inputAttr.getID());
-                ImGui::Text(inputAttr.getName().c_str());
-                imnodes::EndInputAttribute();
-            }
-
-            if (node.getOutput().getType() != AttributeType::NONE)
-            {
-                imnodes::BeginOutputAttribute(node.getOutput().getID());
-                imnodes::EndOutputAttribute();
-            }
-
-            node.createContent();
-
-            imnodes::EndNode();
-        }
-
-        imnodes::EndNodeEditor();
-
-        int start_attr, end_attr;
-        if (imnodes::IsLinkCreated(&start_attr, &end_attr))
-        {
-            std::cout << "New link: start:" << start_attr << ", end:" << end_attr << std::endl;
-            links.push_back(std::make_pair(start_attr, end_attr));
-            if (start_attr == 2 && end_attr == 1) {
-                std::cout << "\tColor chosen R:" << (int)(col1[0]*255.f) << " G:" << (int)(col1[1] * 255.f) << " B:" << (int)(col1[2] * 255.f) << std::endl;
-            }
-            if (start_attr == 3 && end_attr == 1) {
-               // std::cout << "\tColor chosen R:" << (int)(col2[0] * 255.f) << " G:" << (int)(col2[1] * 255.f) << " B:" << (int)(col2[2] * 255.f) << std::endl;
-            }
-        }
-
-        int link_id;
-        if (imnodes::IsLinkHovered(&link_id) && (GetKeyState('A') & 0x8000))
-        {
-            std::cout << "Deleted link: " << links.at(link_id).first << " "<< links.at(link_id).second << std::endl;
-            links.erase(links.begin() + link_id);
-            std::cout << "Remaining links: " << links.size() << std::endl;
-        }
-
-        // released
-        if ((GetKeyState('N') & 0x8000))
-        {
-            nodes.emplace_back("kutya", AttributeType::NONE);
-            nodes.emplace_back("macska", AttributeType::COLOR3);
-            nodes.back().getInputs().emplace_back("hulululu", AttributeType::COLOR3);
-            std::cout << "\tColor R:" << (int)(col1[0] * 255.f) << " G:" << (int)(col1[1] * 255.f) << " B:" << (int)(col1[2] * 255.f) << std::endl;
-        }
-
-        ImGui::End();
-        // Rendering
-        ImGui::Render();
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);

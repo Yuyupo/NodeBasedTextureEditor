@@ -12,6 +12,7 @@ public:
     std::string getName();
     std::vector<Attribute>& getInputs();
     Attribute& getOutput();
+    void addInput(std::string attributeName, AttributeType type);
 
     virtual void createContent();
     virtual Value createOutput();
