@@ -6,6 +6,7 @@ class Node;
 class Editor
 {
 public:
+	// Legyen node add fuggveny, ami van
 	Editor() = delete;
 	static void drawNodes();
 	static void addNode(Node* node);
@@ -19,5 +20,6 @@ private:
 	static std::vector<Attribute*> m_attributes;
 	static std::vector<Node*> m_nodes;
 	static std::vector<std::pair<int, int>> m_links;
+	static bool active_menu;
 };
 

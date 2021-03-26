@@ -3,10 +3,17 @@
 
 class Node;
 
+// Input/output tipusokat picit fliki
+// float2/3 err -> text boxban error?
 enum class AttributeType
 {
     NONE,
-    COLOR3
+    COLOR3,
+    TEXTURELOADER,
+    CONST_INT,
+    CONST_FLOAT,
+    CONST_FLOAT3,
+    CONST_FLOAT4
 };
 
 class Attribute

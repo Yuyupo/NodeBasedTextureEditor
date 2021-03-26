@@ -5,6 +5,7 @@ Attribute::Attribute(int id, std::string attributeName, AttributeType type)
     m_id = id;
     m_parent = nullptr;
     m_type = type;
+    m_name = attributeName;
 }
 
 int Attribute::getID()

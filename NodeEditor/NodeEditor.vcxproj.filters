@@ -8,6 +8,12 @@
     <Filter Include="includes">
       <UniqueIdentifier>{e33ef2d7-13dd-4645-87e7-d2bd59b5a1da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sources\Nodes">
+      <UniqueIdentifier>{5916ec69-183b-479c-91db-4a7a9750dc7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sources\Nodes\Const nodes">
+      <UniqueIdentifier>{429ff57b-d6f1-464c-be07-df68c5a6bea2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -53,7 +59,22 @@
       <Filter>includes</Filter>
     </ClCompile>
     <ClCompile Include="ColorPicker.cpp">
-      <Filter>sources</Filter>
+      <Filter>sources\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
+      <Filter>sources\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantFloat.cpp">
+      <Filter>sources\Nodes\Const nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantFloat3.cpp">
+      <Filter>sources\Nodes\Const nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantInt.cpp">
+      <Filter>sources\Nodes\Const nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantFloat4.cpp">
+      <Filter>sources\Nodes\Const nodes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,7 +126,24 @@
     <ClInclude Include="Editor.h">
       <Filter>sources</Filter>
     </ClInclude>
-    <ClInclude Include="ColorPicker.h" />
+    <ClInclude Include="ColorPicker.h">
+      <Filter>sources\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoader.h">
+      <Filter>sources\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantFloat.h">
+      <Filter>sources\Nodes\Const nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantFloat3.h">
+      <Filter>sources\Nodes\Const nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantInt.h">
+      <Filter>sources\Nodes\Const nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantFloat4.h">
+      <Filter>sources\Nodes\Const nodes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="C:\Users\Yuyupo\Downloads\MyImage01.jpg">

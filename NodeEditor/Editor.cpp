@@ -5,13 +5,19 @@
 #include "imgui_impl_opengl3.h"
 #include "imnodes.h"
 
+#include "ConstantFloat4.h"
+#include "ConstantFloat3.h"
+#include "ConstantInt.h"
+#include "ConstantFloat.h"
 #include "ColorPicker.h"
-#include "Node.h"
+#include "TextureLoader.h"
 #include "Editor.h"
+#include "Node.h"
 
 std::vector<Attribute*> Editor::m_attributes;
 std::vector<Node*> Editor::m_nodes;
 std::vector<std::pair<int, int>> Editor::m_links;
+bool Editor::active_menu = true;
 
 void Editor::drawNodes()
 {
@@ -20,7 +26,39 @@ void Editor::drawNodes()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    ImGui::Begin("Material editor");
+    ImGui::Begin("Material editor", &active_menu, ImGuiWindowFlags_MenuBar);
+    if (ImGui::BeginMenuBar())
+    {
+        if (ImGui::BeginMenu("Add node"))
+        {
+            if (ImGui::MenuItem("Color picker..", ""))
+            { 
+                addNode(new ColorPicker());
+            }
+            if (ImGui::MenuItem("Texture loader", ""))
+            { 
+                addNode(new TextureLoader());
+            }
+            if (ImGui::MenuItem("Const Int", ""))
+            { 
+                addNode(new ConstantInt());
+            }
+            if (ImGui::MenuItem("Const Float", ""))
+            {
+                addNode(new ConstantFloat());
+            }
+            if (ImGui::MenuItem("Const Float3", ""))
+            {
+                addNode(new ConstantFloat3());
+            }
+            if (ImGui::MenuItem("Const Float4", ""))
+            {
+                addNode(new ConstantFloat4());
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMenuBar();
+    }
     imnodes::BeginNodeEditor();
 
     for (Node* node : m_nodes)
@@ -80,7 +118,6 @@ Attribute* Editor::createAttribute(std::string name, AttributeType type)
 
 void Editor::handleEvents()
 {
-    //TODO : optimize this (Y)
     int start_attr, end_attr;
     if (imnodes::IsLinkCreated(&start_attr, &end_attr))
     {
@@ -100,17 +137,29 @@ void Editor::handleEvents()
     }
 
     int link_id;
-    if (imnodes::IsLinkHovered(&link_id) && (GetKeyState('A') & 0x8000))
+    if (imnodes::IsLinkHovered(&link_id) && (GetKeyState('D') & 0x8000))
     {
         std::cout << "Deleted link: " << m_links.at(link_id).first << " " << m_links.at(link_id).second << std::endl;
         m_links.erase(m_links.begin() + link_id);
         std::cout << "Remaining links: " << m_links.size() << std::endl;
     }
 
-    // TODO: KeyReleased
-    if ((GetKeyState('C') & 0x8000))
+    int node_id;
+    if (imnodes::IsNodeHovered(&node_id) && (GetKeyState('D') & 0x8000))
     {
-        addNode(new ColorPicker());
+        std::cout << "Deleted node named: " << m_nodes[node_id-1]->getName() << std::endl;
+
+        for (int i = 0; i < m_links.size(); ++i)
+        {
+            int firstID = m_links[i].first;
+            int secondID = m_links[i].second;
+            if ((m_attributes[firstID]->getParent()->getID() == node_id)
+                || (m_attributes[secondID]->getParent()->getID() == node_id))
+            {
+                m_links.erase(m_links.begin() + i);
+            }
+        }
+      // m_nodes.erase(m_nodes.begin() + (node_id - 1));
     }
 }
 
@@ -131,6 +180,7 @@ void Editor::init(const char* glsl_version, GLFWwindow* window)
 
     Node* n = new Node("Output", AttributeType::NONE);
     n->addInput("Color", AttributeType::COLOR3);
+    n->addInput("Texture", AttributeType::TEXTURELOADER);
     addNode(n);
 }
 

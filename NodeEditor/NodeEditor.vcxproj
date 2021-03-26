@@ -158,6 +158,10 @@
   <ItemGroup>
     <ClCompile Include="Attribute.cpp" />
     <ClCompile Include="ColorPicker.cpp" />
+    <ClCompile Include="ConstantFloat.cpp" />
+    <ClCompile Include="ConstantFloat3.cpp" />
+    <ClCompile Include="ConstantFloat4.cpp" />
+    <ClCompile Include="ConstantInt.cpp" />
     <ClCompile Include="Editor.cpp" />
     <ClCompile Include="libs\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="libs\backends\imgui_impl_opengl3.cpp" />
@@ -170,11 +174,16 @@
     <ClCompile Include="libs\imnodes\imnodes.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="Value.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Attribute.h" />
     <ClInclude Include="ColorPicker.h" />
+    <ClInclude Include="ConstantFloat.h" />
+    <ClInclude Include="ConstantFloat3.h" />
+    <ClInclude Include="ConstantFloat4.h" />
+    <ClInclude Include="ConstantInt.h" />
     <ClInclude Include="Editor.h" />
     <ClInclude Include="libs\backends\imgui_impl_glfw.h" />
     <ClInclude Include="libs\backends\imgui_impl_opengl3.h" />
@@ -189,6 +198,7 @@
     <ClInclude Include="libs\imnodes\imnodes.h" />
     <ClInclude Include="libs\imnodes\stb_image.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="Value.h" />
   </ItemGroup>
   <ItemGroup>
