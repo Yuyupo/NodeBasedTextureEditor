@@ -9,6 +9,7 @@ ConstantFloat3::ConstantFloat3()
 
 void ConstantFloat3::createContent()
 {
+	ImGui::PushItemWidth(100.f);
 	ImGui::InputFloat3("Float3", m_xyz);
 }
 

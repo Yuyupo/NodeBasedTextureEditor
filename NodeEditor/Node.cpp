@@ -4,18 +4,31 @@
 #include "Node.h"
 #include "Editor.h"
 
-int Node::m_counter = 0;
-
 Node::Node(std::string nodeName, AttributeType outputType)
-    : m_id(++m_counter), m_name(nodeName)
+    : m_id(0), m_name(nodeName)
 {
     m_output = Editor::createAttribute("", outputType);
     m_output->setParent(this);
 }
 
+Node::~Node()
+{
+    for (Attribute* inputAttr : getInputs())
+    {
+        //Editor::deleteAttribute(inputAttr->getID());
+    }
+
+    //Editor::deleteAttribute(getOutput()->getID());
+}
+
 int Node::getID()
 {
     return m_id;
+}
+
+void Node::setID(int id)
+{
+    m_id = id;
 }
 
 std::string Node::getName()

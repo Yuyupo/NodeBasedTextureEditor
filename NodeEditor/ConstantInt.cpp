@@ -9,6 +9,7 @@ ConstantInt::ConstantInt()
 
 void ConstantInt::createContent()
 {
+	ImGui::PushItemWidth(50.f);
 	ImGui::InputInt("Value", &m_int);
 }
 

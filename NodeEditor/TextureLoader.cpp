@@ -18,6 +18,8 @@ TextureLoader::TextureLoader()
 
 void TextureLoader::createContent()
 {
+    ImGui::PushItemWidth(200.f);
+
     if (ImGui::InputText("Full path", m_path, IM_ARRAYSIZE(m_path)))
     {
         LoadTextureFromFile(m_path, &m_texture, &m_width, &m_height);

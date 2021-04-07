@@ -9,6 +9,7 @@ ConstantFloat4::ConstantFloat4()
 
 void ConstantFloat4::createContent()
 {
+	ImGui::PushItemWidth(150.f);
 	ImGui::InputFloat4("Float4", m_xyzw);
 }
 

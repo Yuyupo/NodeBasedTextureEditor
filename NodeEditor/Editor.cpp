@@ -10,6 +10,7 @@
 #include "ConstantInt.h"
 #include "ConstantFloat.h"
 #include "ColorPicker.h"
+#include "ChannelPicker.h"
 #include "TextureLoader.h"
 #include "Editor.h"
 #include "Node.h"
@@ -29,31 +30,48 @@ void Editor::drawNodes()
     ImGui::Begin("Material editor", &active_menu, ImGuiWindowFlags_MenuBar);
     if (ImGui::BeginMenuBar())
     {
-        if (ImGui::BeginMenu("Add node"))
+        if (ImGui::BeginMenu("New node"))
         {
-            if (ImGui::MenuItem("Color picker..", ""))
+            if (ImGui::MenuItem("Color picker", ""))
             { 
-                addNode(new ColorPicker());
+                createNode<ColorPicker>();
+            }
+            if (ImGui::MenuItem("Color channel picker", ""))
+            {
+                Node* n = createNode<ChannelPicker>();
+                n->addInput("Color", AttributeType::COLOR3);
             }
             if (ImGui::MenuItem("Texture loader", ""))
             { 
-                addNode(new TextureLoader());
+                createNode<TextureLoader>();
             }
-            if (ImGui::MenuItem("Const Int", ""))
-            { 
-                addNode(new ConstantInt());
-            }
-            if (ImGui::MenuItem("Const Float", ""))
+            if (ImGui::BeginMenu("Constants", ""))
             {
-                addNode(new ConstantFloat());
+                if (ImGui::MenuItem("Const Int", ""))
+                {
+                    createNode<ConstantInt>();
+                }
+                if (ImGui::MenuItem("Const Float", ""))
+                {
+                    createNode<ConstantFloat>();
+                }
+                if (ImGui::MenuItem("Const Float3", ""))
+                {
+                    createNode<ConstantFloat3>();
+                }
+                if (ImGui::MenuItem("Const Float4", ""))
+                {
+                    createNode<ConstantFloat4>();
+                }
+                ImGui::EndMenu();
             }
-            if (ImGui::MenuItem("Const Float3", ""))
+            if (ImGui::BeginMenu("Constant Operations", ""))
             {
-                addNode(new ConstantFloat3());
-            }
-            if (ImGui::MenuItem("Const Float4", ""))
-            {
-                addNode(new ConstantFloat4());
+                if (ImGui::MenuItem("Add Float4", ""))
+                {
+
+                }
+                ImGui::EndMenu();
             }
             ImGui::EndMenu();
         }
@@ -63,6 +81,7 @@ void Editor::drawNodes()
 
     for (Node* node : m_nodes)
     {
+        if (node == nullptr) continue;
         imnodes::BeginNode(node->getID());
         imnodes::BeginNodeTitleBar();
         ImGui::TextUnformatted(node->getName().c_str());
@@ -112,8 +131,61 @@ void Editor::addLink(int attribute1, int attribute2)
 
 Attribute* Editor::createAttribute(std::string name, AttributeType type)
 {
+    for (size_t i = 0; i < m_attributes.size(); i++)
+    {
+        if (m_attributes[i] == nullptr)
+        {
+            m_attributes[i] = new Attribute(i, name, type);
+            return m_attributes[i];
+        }
+    }
+
     m_attributes.push_back(new Attribute(m_attributes.size(), name, type));
     return m_attributes.back();
+}
+
+void Editor::deleteAttribute(int id)
+{
+    delete m_attributes[id];
+    m_attributes[id] = nullptr;
+}
+
+Node* Editor::getInputNode(Attribute* attr)
+{
+    for (size_t i = 0; i < m_links.size(); i++)
+    {
+        if (m_links[i].second == attr->getID())
+        {
+            return m_attributes[m_links[i].first]->getParent();
+        }
+    }
+    return nullptr;
+}
+
+void Editor::deleteNode(int id)
+{
+   
+    delete m_nodes[id];
+    m_nodes[id] = nullptr;
+}
+
+template <typename NodeType>
+Node* Editor::createNode()
+{
+    Node* node = new NodeType();
+    for (size_t i = 0; i < m_nodes.size(); i++)
+    {
+        if (m_nodes[i] == nullptr)
+        {
+            node->setID(i);
+            m_nodes[i] = node;
+            return m_nodes[i];
+        }
+    }
+
+    node->setID(m_nodes.size());
+    m_nodes.push_back(node);
+    return m_nodes.back();
 }
 
 void Editor::handleEvents()
@@ -127,13 +199,19 @@ void Editor::handleEvents()
         if (end_attr == 1)
         {
             Color3 col1 = m_attributes[start_attr]->getParent()->createOutput().asColor3();
-            std::cout << m_attributes[start_attr]->getParent()->getName();
+            std::cout << "Link sent from: " << m_attributes[start_attr]->getParent()->getName() << "\tTo: " << m_attributes[end_attr]->getParent()->getName() << std::endl;
             std::cout << "\tColor chosen R:" << (int)(col1.r * 255.f) << " G:" << (int)(col1.g * 255.f) << " B:" << (int)(col1.b * 255.f) << std::endl;
         }
 
-        //if (start_attr == 2 && end_attr == 1) {
-            //std::cout << "\tColor chosen R:" << (int)(col1[0] * 255.f) << " G:" << (int)(col1[1] * 255.f) << " B:" << (int)(col1[2] * 255.f) << std::endl;
-        //}
+        if (m_attributes[end_attr]->getParent()->getName() == "Color Channel Picker")
+        {
+            // Set input to channel picker?
+            //m_attributes[end_attr]->getParent()->
+
+            Color3 col1 = m_attributes[start_attr]->getParent()->createOutput().asColor3();
+            std::cout << "Link sent from: " << m_attributes[start_attr]->getParent()->getName() << "\tTo: " << m_attributes[end_attr]->getParent()->getName() << std::endl; 
+            std::cout << "\tColor chosen R:" << (int)(col1.r * 255.f) << " G:" << (int)(col1.g * 255.f) << " B:" << (int)(col1.b * 255.f) << std::endl;
+        }
     }
 
     int link_id;
@@ -147,7 +225,7 @@ void Editor::handleEvents()
     int node_id;
     if (imnodes::IsNodeHovered(&node_id) && (GetKeyState('D') & 0x8000))
     {
-        std::cout << "Deleted node named: " << m_nodes[node_id-1]->getName() << std::endl;
+        std::cout << "Deleted node named: " << m_nodes[node_id]->getName() << std::endl;
 
         for (int i = 0; i < m_links.size(); ++i)
         {
@@ -156,10 +234,13 @@ void Editor::handleEvents()
             if ((m_attributes[firstID]->getParent()->getID() == node_id)
                 || (m_attributes[secondID]->getParent()->getID() == node_id))
             {
+                std::cout << "\tDeleted node links: " << firstID << " " << secondID << std::endl;
                 m_links.erase(m_links.begin() + i);
+                i--;
             }
         }
-      // m_nodes.erase(m_nodes.begin() + (node_id - 1));
+
+        deleteNode(node_id);
     }
 }
 
@@ -182,6 +263,7 @@ void Editor::init(const char* glsl_version, GLFWwindow* window)
     n->addInput("Color", AttributeType::COLOR3);
     n->addInput("Texture", AttributeType::TEXTURELOADER);
     addNode(n);
+    n->setID(523);
 }
 
 void Editor::cleanUp()
@@ -191,3 +273,4 @@ void Editor::cleanUp()
         delete node;
     }
 }
+

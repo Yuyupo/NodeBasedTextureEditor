@@ -8,7 +8,9 @@ class Node
 {
 public:
     Node(std::string nodeName, AttributeType outputType);
+    ~Node();
     int getID();
+    void setID(int id);
     std::string getName();
     std::vector<Attribute*>& getInputs();
     Attribute* getOutput();
@@ -18,7 +20,6 @@ public:
     virtual Value createOutput();
 
 private:
-    static int m_counter;
     int m_id;
     std::string m_name;
     std::vector<Attribute*> m_inputs;

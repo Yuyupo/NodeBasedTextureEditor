@@ -12,9 +12,15 @@ public:
 	static void addNode(Node* node);
 	static void addLink(int attribute1, int attribute2);
 	static Attribute* createAttribute(std::string name, AttributeType type);
+	static void deleteAttribute(int id);
 	static void handleEvents();
 	static void init(const char* glsl_version, GLFWwindow* window);
 	static void cleanUp();
+	static Node* getInputNode(Attribute* attr);
+	static void deleteNode(int id);
+
+	template <typename T>
+	static Node* createNode();
 
 private:
 	static std::vector<Attribute*> m_attributes;

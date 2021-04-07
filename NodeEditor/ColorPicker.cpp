@@ -10,6 +10,7 @@ ColorPicker::ColorPicker()
 
 void ColorPicker::createContent()
 {
+	ImGui::PushItemWidth(100.f);
 	ImGui::ColorEdit3("Color", m_color);
 }
 
