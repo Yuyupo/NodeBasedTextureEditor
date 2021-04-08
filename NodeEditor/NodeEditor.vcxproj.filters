@@ -85,6 +85,9 @@
     <ClCompile Include="Add.cpp">
       <Filter>sources\Nodes\Operations</Filter>
     </ClCompile>
+    <ClCompile Include="Output.cpp">
+      <Filter>sources\Nodes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Node.h">
@@ -158,6 +161,9 @@
     </ClInclude>
     <ClInclude Include="Add.h">
       <Filter>sources\Nodes\Operations</Filter>
+    </ClInclude>
+    <ClInclude Include="Output.h">
+      <Filter>sources\Nodes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

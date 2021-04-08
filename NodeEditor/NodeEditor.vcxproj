@@ -176,6 +176,7 @@
     <ClCompile Include="libs\imnodes\imnodes.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Output.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="Value.cpp" />
   </ItemGroup>
@@ -202,6 +203,7 @@
     <ClInclude Include="libs\imnodes\imnodes.h" />
     <ClInclude Include="libs\imnodes\stb_image.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Output.h" />
     <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="Value.h" />
   </ItemGroup>

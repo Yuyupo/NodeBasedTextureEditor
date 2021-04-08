@@ -24,9 +24,7 @@ void TextureLoader::createContent()
     {
         LoadTextureFromFile(m_path, &m_texture, &m_width, &m_height);
     }
-    ImGui::Image((void*)(intptr_t)m_texture, ImVec2(m_width, m_height));
 
-    ImGui::Text("pointer = %p", m_texture);
     ImGui::Text("size = %d x %d", m_width, m_height);
 }
 

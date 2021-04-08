@@ -9,6 +9,7 @@ ChannelPicker::ChannelPicker()
 	, m_green(true)
 	, m_blue(true)
 {
+	addInput("Color", AttributeType::COLOR3);
 }
 
 void ChannelPicker::createContent()

@@ -5,6 +5,7 @@
 #include "imgui_impl_opengl3.h"
 #include "imnodes.h"
 
+#include "Output.h"
 #include "ConstantFloat4.h"
 #include "ConstantFloat3.h"
 #include "ConstantInt.h"
@@ -39,7 +40,6 @@ void Editor::drawNodes()
             if (ImGui::MenuItem("Color channel picker", ""))
             {
                 Node* n = createNode<ChannelPicker>();
-                n->addInput("Color", AttributeType::COLOR3);
             }
             if (ImGui::MenuItem("Texture loader", ""))
             { 
@@ -164,7 +164,6 @@ Node* Editor::getInputNode(Attribute* attr)
 
 void Editor::deleteNode(int id)
 {
-   
     delete m_nodes[id];
     m_nodes[id] = nullptr;
 }
@@ -196,6 +195,7 @@ void Editor::handleEvents()
         std::cout << "New link: start:" << start_attr << ", end:" << end_attr << std::endl;
         addLink(start_attr, end_attr);
 
+        // Output Color
         if (end_attr == 1)
         {
             Color3 col1 = m_attributes[start_attr]->getParent()->createOutput().asColor3();
@@ -203,11 +203,16 @@ void Editor::handleEvents()
             std::cout << "\tColor chosen R:" << (int)(col1.r * 255.f) << " G:" << (int)(col1.g * 255.f) << " B:" << (int)(col1.b * 255.f) << std::endl;
         }
 
+        // Output Texture
+        if (end_attr == 2)
+        {
+            Texture tex = m_attributes[start_attr]->getParent()->createOutput().asTexture();
+            std::cout << "Link sent from: " << m_attributes[start_attr]->getParent()->getName() << "\tTo: " << m_attributes[end_attr]->getParent()->getName() << std::endl;
+            std::cout << "\t Texture size: Height: " << tex.height << ", Width: " << tex.width << std::endl;
+        }
+
         if (m_attributes[end_attr]->getParent()->getName() == "Color Channel Picker")
         {
-            // Set input to channel picker?
-            //m_attributes[end_attr]->getParent()->
-
             Color3 col1 = m_attributes[start_attr]->getParent()->createOutput().asColor3();
             std::cout << "Link sent from: " << m_attributes[start_attr]->getParent()->getName() << "\tTo: " << m_attributes[end_attr]->getParent()->getName() << std::endl; 
             std::cout << "\tColor chosen R:" << (int)(col1.r * 255.f) << " G:" << (int)(col1.g * 255.f) << " B:" << (int)(col1.b * 255.f) << std::endl;
@@ -223,7 +228,7 @@ void Editor::handleEvents()
     }
 
     int node_id;
-    if (imnodes::IsNodeHovered(&node_id) && (GetKeyState('D') & 0x8000))
+    if (imnodes::IsNodeHovered(&node_id) && (GetKeyState('D') & 0x8000) && m_nodes[node_id]->getName() != "Output")
     {
         std::cout << "Deleted node named: " << m_nodes[node_id]->getName() << std::endl;
 
@@ -259,11 +264,7 @@ void Editor::init(const char* glsl_version, GLFWwindow* window)
     ImGui_ImplOpenGL3_Init(glsl_version);
     imnodes::Initialize();
 
-    Node* n = new Node("Output", AttributeType::NONE);
-    n->addInput("Color", AttributeType::COLOR3);
-    n->addInput("Texture", AttributeType::TEXTURELOADER);
-    addNode(n);
-    n->setID(523);
+    createNode<Output>();
 }
 
 void Editor::cleanUp()
