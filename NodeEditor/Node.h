@@ -7,17 +7,21 @@
 class Node
 {
 public:
-    Node(std::string nodeName, AttributeType outputType);
+    Node(std::string nodeName);
     ~Node();
     int getID();
     void setID(int id);
     std::string getName();
     std::vector<Attribute*>& getInputs();
     Attribute* getOutput();
-    void addInput(std::string attributeName, AttributeType type);
+    void addInput(std::string attributeName);
+    Value getInputValue(int idx);
 
     virtual void createContent();
     virtual Value createOutput();
+
+protected:
+    static void generateTexture(Texture& texture);
 
 private:
     int m_id;

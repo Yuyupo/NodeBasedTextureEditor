@@ -2,7 +2,7 @@
 #include "imgui.h"
 
 ConstantFloat4::ConstantFloat4()
-	: Node("Constant Float4", AttributeType::CONST_FLOAT4)
+	: Node("Constant Float4")
 	, m_xyzw{ 0.f, 0.f, 0.f, 0.f}
 {
 }

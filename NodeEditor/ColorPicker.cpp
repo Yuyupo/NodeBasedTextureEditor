@@ -3,7 +3,7 @@
 #include "imgui.h"
 
 ColorPicker::ColorPicker() 
-	: Node("Color Picker", AttributeType::COLOR3)
+	: Node("Color Picker")
 	, m_color{ 0.f, 0.f, 0.f }
 {
 }

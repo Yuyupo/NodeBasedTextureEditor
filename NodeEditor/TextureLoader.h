@@ -7,15 +7,13 @@ class TextureLoader :
 public:
     TextureLoader();
 
-    bool LoadTextureFromFile(const char* filename, GLuint* out_texture, int* out_width, int* out_height);
-
     void createContent() override;
     Value createOutput() override;
 
 private:
+    bool LoadTextureFromFile(const char* filename);
+
     char m_path[128];
-    int m_width;
-    int m_height;
-    GLuint m_texture;
+    Texture m_texture;
 };
 

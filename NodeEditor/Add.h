@@ -8,8 +8,5 @@ public:
 
     void createContent() override;
     Value createOutput() override;
-
-private:
-    float m_float;
 };
 

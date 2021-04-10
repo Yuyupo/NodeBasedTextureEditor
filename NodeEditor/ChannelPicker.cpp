@@ -3,13 +3,13 @@
 #include "imgui.h"
 
 ChannelPicker::ChannelPicker() 
-	: Node("Color Channel Picker", AttributeType::COLOR3)
+	: Node("Color Channel Picker")
 	, m_color{ 0.f, 0.f, 0.f }
 	, m_red(true)
 	, m_green(true)
 	, m_blue(true)
 {
-	addInput("Color", AttributeType::COLOR3);
+	addInput("Color");
 }
 
 void ChannelPicker::createContent()
@@ -21,13 +21,14 @@ void ChannelPicker::createContent()
 
 Value ChannelPicker::createOutput()
 {
-	Node* InputNode = Editor::getInputNode(getInputs()[0]);
+	Value inputValue = getInputValue(0);
 
-	if (InputNode == nullptr) {
+	if (inputValue.getType() != ValueType::COLOR3)
+	{
 		return Value(Color3(0.f, 0.f, 0.f));
 	}
 
-	m_color = InputNode->createOutput().asColor3();
+	m_color = inputValue.asColor3();
 	if (!m_red)
 	{
 		m_color.r = 0.f;

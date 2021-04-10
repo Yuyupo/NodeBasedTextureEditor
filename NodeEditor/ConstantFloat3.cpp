@@ -2,7 +2,7 @@
 #include "imgui.h"
 
 ConstantFloat3::ConstantFloat3()
-	: Node("Constant Float3", AttributeType::CONST_FLOAT3)
+	: Node("Constant Float3")
 	, m_xyz{0.f, 0.f, 0.f}
 {
 }

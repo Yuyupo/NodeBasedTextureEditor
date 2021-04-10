@@ -1,5 +1,16 @@
 #pragma once
-#include <GL/gl3w.h>   
+#include <GL/gl3w.h>
+
+enum class ValueType
+{
+    NONE,
+    COLOR3,
+    TEXTURE,
+    INT,
+    FLOAT,
+    FLOAT3,
+    FLOAT4
+};
 
 struct Color3
 {
@@ -43,9 +54,8 @@ public:
     Texture& asTexture();
     Float3& asFloat3();
     Float4& asFloat4();
+    ValueType getType();
 
-    //destruktor kezzel union miatt
-    // kell type mezo, hogy mit tarolok a unionban
 private:
     union
     {
@@ -56,5 +66,7 @@ private:
         float m_f;
         int m_i;
     };
+
+    ValueType m_type;
 };
 

@@ -3,38 +3,43 @@
 
 Value::Value()
 {
-    //NOTE: 0 out the biggest member
-    m_float4 = { 0.f, 0.f, 0.f , 0.f};
+    m_type = ValueType::NONE;
 }
 
 Value::Value(Color3& rgb)
 {
     m_color3 = rgb;
+    m_type = ValueType::COLOR3;
 }
 
 Value::Value(Texture& texture)
 {
     m_texture = texture;
+    m_type = ValueType::TEXTURE;
 }
 
 Value::Value(float f)
 {
     m_f = f;
+    m_type = ValueType::FLOAT;
 }
 
 Value::Value(int i)
 {
     m_i = i;
+    m_type = ValueType::INT;
 }
 
 Value::Value(Float3& float3)
 {
     m_float3 = float3;
+    m_type = ValueType::FLOAT3;
 }
 
 Value::Value(Float4& float4)
 {
     m_float4 = float4;
+    m_type = ValueType::FLOAT4;
 }
 
 float Value::asFloat()
@@ -65,6 +70,11 @@ Float3& Value::asFloat3()
 Float4& Value::asFloat4()
 {
     return m_float4;
+}
+
+ValueType Value::getType()
+{
+    return m_type;
 }
 
 Color3::Color3(float r, float g, float b) 

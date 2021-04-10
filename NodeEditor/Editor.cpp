@@ -13,9 +13,11 @@
 #include "ColorPicker.h"
 #include "ChannelPicker.h"
 #include "TextureLoader.h"
+#include "Add.h"
 #include "Editor.h"
 #include "Node.h"
 
+GLuint Editor::m_renderingFrameBuffer;
 std::vector<Attribute*> Editor::m_attributes;
 std::vector<Node*> Editor::m_nodes;
 std::vector<std::pair<int, int>> Editor::m_links;
@@ -67,9 +69,9 @@ void Editor::drawNodes()
             }
             if (ImGui::BeginMenu("Constant Operations", ""))
             {
-                if (ImGui::MenuItem("Add Float4", ""))
+                if (ImGui::MenuItem("Add", ""))
                 {
-
+                    createNode<Add>();
                 }
                 ImGui::EndMenu();
             }
@@ -94,7 +96,7 @@ void Editor::drawNodes()
             imnodes::EndInputAttribute();
         }
 
-        if (node->getOutput()->getType() != AttributeType::NONE)
+        if (node->getName() != "Output")
         {
             imnodes::BeginOutputAttribute(node->getOutput()->getID());
             imnodes::EndOutputAttribute();
@@ -129,18 +131,18 @@ void Editor::addLink(int attribute1, int attribute2)
     m_links.push_back(std::make_pair(attribute1, attribute2));
 }
 
-Attribute* Editor::createAttribute(std::string name, AttributeType type)
+Attribute* Editor::createAttribute(std::string name)
 {
     for (size_t i = 0; i < m_attributes.size(); i++)
     {
         if (m_attributes[i] == nullptr)
         {
-            m_attributes[i] = new Attribute(i, name, type);
+            m_attributes[i] = new Attribute(i, name);
             return m_attributes[i];
         }
     }
 
-    m_attributes.push_back(new Attribute(m_attributes.size(), name, type));
+    m_attributes.push_back(new Attribute(m_attributes.size(), name));
     return m_attributes.back();
 }
 
@@ -166,6 +168,11 @@ void Editor::deleteNode(int id)
 {
     delete m_nodes[id];
     m_nodes[id] = nullptr;
+}
+
+GLuint Editor::getRenderingFrameBuffer()
+{
+    return m_renderingFrameBuffer;
 }
 
 template <typename NodeType>
@@ -264,11 +271,17 @@ void Editor::init(const char* glsl_version, GLFWwindow* window)
     ImGui_ImplOpenGL3_Init(glsl_version);
     imnodes::Initialize();
 
+    glGenFramebuffers(1, &m_renderingFrameBuffer);
+    //glBindFramebuffer(GL_FRAMEBUFFER, m_renderingFrameBuffer);
+
     createNode<Output>();
 }
 
 void Editor::cleanUp()
 {
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDeleteFramebuffers(1, &m_renderingFrameBuffer);
+
     for (Node* node : m_nodes)
     {
         delete node;

@@ -11,18 +11,20 @@ public:
 	static void drawNodes();
 	static void addNode(Node* node);
 	static void addLink(int attribute1, int attribute2);
-	static Attribute* createAttribute(std::string name, AttributeType type);
+	static Attribute* createAttribute(std::string name);
 	static void deleteAttribute(int id);
 	static void handleEvents();
 	static void init(const char* glsl_version, GLFWwindow* window);
 	static void cleanUp();
 	static Node* getInputNode(Attribute* attr);
 	static void deleteNode(int id);
+	static GLuint getRenderingFrameBuffer();
 
 	template <typename T>
 	static Node* createNode();
 
 private:
+	static GLuint m_renderingFrameBuffer;
 	static std::vector<Attribute*> m_attributes;
 	static std::vector<Node*> m_nodes;
 	static std::vector<std::pair<int, int>> m_links;

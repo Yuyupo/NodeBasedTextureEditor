@@ -2,7 +2,7 @@
 #include "imgui.h"
 
 ConstantInt::ConstantInt()
-	: Node("Constant Int", AttributeType::CONST_INT)
+	: Node("Constant Int")
 	, m_int(0)
 {
 }
