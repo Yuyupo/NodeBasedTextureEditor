@@ -18,9 +18,6 @@ Output::Output()
 
 Output::~Output()
 {
-	// cleanup
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDeleteFramebuffers(1, &m_fb);
 }
 
 void Output::createContent()
@@ -39,7 +36,7 @@ Value Output::createOutput()
 	Value inputColorValue = getInputValue(0);
 	Value inputTextureValue = getInputValue(1);
 
-	if (inputColorValue.getType() == ValueType::COLOR3) {
+	if (inputColorValue.getType() == ValueType::FLOAT3) {
 		m_color = inputColorValue.asColor3();
 
 		// Init
@@ -58,6 +55,8 @@ Value Output::createOutput()
 	if (inputTextureValue.getType() == ValueType::TEXTURE) {
 		m_texture = inputTextureValue.asTexture();
 	}
+
+	//TODO zero out the texture when link is broken
 
 	return Value();
 }

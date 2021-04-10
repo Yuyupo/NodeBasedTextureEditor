@@ -8,5 +8,8 @@ public:
 
     void createContent() override;
     Value createOutput() override;
+
+private:
+    Texture m_texture;
 };
 

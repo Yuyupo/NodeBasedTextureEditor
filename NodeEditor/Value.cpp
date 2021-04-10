@@ -9,7 +9,7 @@ Value::Value()
 Value::Value(Color3& rgb)
 {
     m_color3 = rgb;
-    m_type = ValueType::COLOR3;
+    m_type = ValueType::FLOAT3;
 }
 
 Value::Value(Texture& texture)

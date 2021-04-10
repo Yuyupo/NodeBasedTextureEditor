@@ -74,7 +74,6 @@ Value Node::createOutput()
 
 void Node::generateTexture(Texture& texture)
 {
-
     glGenTextures(1, &texture.texture);
     glBindTexture(GL_TEXTURE_2D, texture.texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

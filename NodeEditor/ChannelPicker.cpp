@@ -23,7 +23,7 @@ Value ChannelPicker::createOutput()
 {
 	Value inputValue = getInputValue(0);
 
-	if (inputValue.getType() != ValueType::COLOR3)
+	if (inputValue.getType() != ValueType::FLOAT3)
 	{
 		return Value(Color3(0.f, 0.f, 0.f));
 	}

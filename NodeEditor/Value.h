@@ -4,7 +4,6 @@
 enum class ValueType
 {
     NONE,
-    COLOR3,
     TEXTURE,
     INT,
     FLOAT,
