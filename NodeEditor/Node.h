@@ -22,6 +22,8 @@ public:
 
 protected:
     static void generateTexture(Texture& texture);
+    static void bindFramebuffer(Texture& texture);
+    static void resetFrameBuffer();
 
 private:
     int m_id;

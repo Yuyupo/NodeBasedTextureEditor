@@ -39,17 +39,12 @@ Value Output::createOutput()
 	if (inputColorValue.getType() == ValueType::FLOAT3) {
 		m_color = inputColorValue.asColor3();
 
-		// Init
-		glBindFramebuffer(GL_FRAMEBUFFER, m_fb);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_colorTexture.texture, 0);
-		glViewport(0, 0, m_colorTexture.width, m_colorTexture.height);
+		bindFramebuffer(m_colorTexture);
 
-		// Work
 		glClearColor(m_color.r, m_color.g, m_color.b, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// Reset 
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		resetFrameBuffer();
 	}
 
 	if (inputTextureValue.getType() == ValueType::TEXTURE) {

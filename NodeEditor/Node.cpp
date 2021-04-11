@@ -84,5 +84,18 @@ void Node::generateTexture(Texture& texture)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.width, texture.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, emptyData.data());
 }
 
+void Node::bindFramebuffer(Texture& texture)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, Editor::getRenderingFrameBuffer());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.texture, 0);
+    glViewport(0, 0, texture.width, texture.height);
+}
+
+void Node::resetFrameBuffer()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+
 
 
