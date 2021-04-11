@@ -6,7 +6,6 @@ class Node;
 class Editor
 {
 public:
-	// Legyen node add fuggveny, ami van
 	Editor() = delete;
 	static void drawNodes();
 	static void addNode(Node* node);
@@ -19,12 +18,16 @@ public:
 	static Node* getInputNode(Attribute* attr);
 	static void deleteNode(int id);
 	static GLuint getRenderingFrameBuffer();
+	static GLuint getRenderingVAO();
 
 	template <typename T>
 	static Node* createNode();
 
 private:
 	static GLuint m_renderingFrameBuffer;
+	static GLuint m_renderingVertexArrayObject;
+	static GLuint m_renderingVertexBuffer;
+
 	static std::vector<Attribute*> m_attributes;
 	static std::vector<Node*> m_nodes;
 	static std::vector<std::pair<int, int>> m_links;

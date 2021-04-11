@@ -18,10 +18,86 @@
 #include "Node.h"
 
 GLuint Editor::m_renderingFrameBuffer;
+GLuint Editor::m_renderingVertexArrayObject;
+GLuint Editor::m_renderingVertexBuffer;
 std::vector<Attribute*> Editor::m_attributes;
 std::vector<Node*> Editor::m_nodes;
 std::vector<std::pair<int, int>> Editor::m_links;
 bool Editor::active_menu = true;
+
+static unsigned int createShaderProgram(const char* vertex_src, const char* fragment_src) {
+    // X.1. Create the vertex shader.
+    unsigned int vertex_shader;
+    {
+        // X.1.1. Create a vertex shader object.
+        vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+
+        // X.1.2. Specify the shader source.
+        glShaderSource(vertex_shader, 1, &vertex_src, NULL);
+
+        // X.1.3. Compile the shader.
+        glCompileShader(vertex_shader);
+
+        // X.1.4. Check if there is any error during compilation.
+        int success;
+        glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
+        if (!success) {
+            char info[512];
+            glGetShaderInfoLog(vertex_shader, 512, NULL, info);
+            printf("Vertex shader error:\n%s\n", info);
+            exit(-3);
+        }
+    }
+
+    // X.2. Create the fragment shader.
+    unsigned int fragment_shader;
+    {
+        // X.2.1. Create a fragment shader object.
+        fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+
+        // X.2.2. Specify the shader source.
+        glShaderSource(fragment_shader, 1, &fragment_src, NULL);
+
+        // X.2.3. Compile the shader.
+        glCompileShader(fragment_shader);
+
+        // X.2.4. Check if there is any error during compilation.
+        int success;
+        glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
+        if (!success) {
+            char info[512];
+            glGetShaderInfoLog(fragment_shader, 512, NULL, info);
+            printf("Fragment shader error:\n%s\n", info);
+            exit(-3);
+        }
+    }
+
+    // X.3. Create a shader program and attach the vertex/fragment shaders.
+    unsigned int shader_program;
+    {
+        shader_program = glCreateProgram();
+        glAttachShader(shader_program, vertex_shader);
+        glAttachShader(shader_program, fragment_shader);
+        glLinkProgram(shader_program);
+
+        int success;
+        glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
+        if (!success) {
+            char info[512];
+            glGetProgramInfoLog(shader_program, 512, NULL, info);
+            printf("Program error:\n%s\n", info);
+            exit(-3);
+        }
+    }
+
+    // X.4. The vertex and fragment shaders can be removed after linking.
+    {
+        glDeleteShader(vertex_shader);
+        glDeleteShader(fragment_shader);
+    }
+
+    return shader_program;
+}
 
 void Editor::drawNodes()
 {
@@ -175,6 +251,11 @@ GLuint Editor::getRenderingFrameBuffer()
     return m_renderingFrameBuffer;
 }
 
+GLuint Editor::getRenderingVAO()
+{
+    return m_renderingVertexArrayObject;
+}
+
 template <typename NodeType>
 Node* Editor::createNode()
 {
@@ -271,8 +352,57 @@ void Editor::init(const char* glsl_version, GLFWwindow* window)
     ImGui_ImplOpenGL3_Init(glsl_version);
     imnodes::Initialize();
 
+    const char* texture_display_vertex_src = R"(#version 310 es
+precision highp float;
+in vec2 aPos;
+in vec2 aTex;
+out vec2 vTex;
+void main() {
+    gl_Position = vec4(aPos, 0.0f, 1.0f);
+    vTex = aTex;
+})";
+
+    const char* texture_display_fragment_src = R"(#version 310 es
+precision highp float;
+in vec2 vTex;
+uniform sampler2D inputImage;
+out vec4 outColor;
+void main() {
+    outColor = vec4(texture(inputImage, vTex).rgb, 1.0f);
+})";
+
+    unsigned int texture_program = createShaderProgram(texture_display_vertex_src, texture_display_fragment_src);
+    glUseProgram(texture_program);
+
     glGenFramebuffers(1, &m_renderingFrameBuffer);
-    //glBindFramebuffer(GL_FRAMEBUFFER, m_renderingFrameBuffer);
+
+    glGenBuffers(1, &m_renderingVertexBuffer);
+    glGenVertexArrays(1, &m_renderingVertexArrayObject);
+    glBindVertexArray(m_renderingVertexArrayObject);
+    glBindBuffer(GL_ARRAY_BUFFER, m_renderingVertexBuffer);
+
+    int aPosLoc = glGetAttribLocation(texture_program, "aPos");
+    int aTexLoc = glGetAttribLocation(texture_program, "aTex");
+
+    // Vertex coords
+    glVertexAttribPointer(aPosLoc, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), nullptr);
+    glEnableVertexAttribArray(aPosLoc);
+
+    // UV coords
+    glVertexAttribPointer(aTexLoc, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (const GLvoid*)(2 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(aTexLoc);
+    glBindVertexArray(0);
+
+    static const GLfloat vertices[] = {
+        -1.0,  1.0,  0.0, 1.0,
+        -1.0, -1.0,  0.0, 0.0,
+         1.0,  1.0,  1.0, 1.0,
+         1.0, -1.0,  1.0, 0.0,
+    };
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
     createNode<Output>();
 }
@@ -281,6 +411,8 @@ void Editor::cleanUp()
 {
     //glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDeleteFramebuffers(1, &m_renderingFrameBuffer);
+    glDeleteVertexArrays( 1, &m_renderingVertexArrayObject);
+    glDeleteBuffers(1, &m_renderingVertexBuffer);
 
     for (Node* node : m_nodes)
     {

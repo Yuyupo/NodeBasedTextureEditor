@@ -9,7 +9,7 @@
 
 TextureLoader::TextureLoader()
     : Node("2D Texture Loader")
-    , m_path("")
+    , m_path("C:\\Users\\Yuyupo\\Downloads\\MyImage01.jpg")
     , m_texture{ 128.f, 128.f, 0}
 {
     generateTexture(m_texture);

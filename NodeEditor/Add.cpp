@@ -44,26 +44,27 @@ Value Add::createOutput()
 
 Value Add::handleTexture(Texture texture, Value value)
 {
-	bindFramebuffer(texture);
-	glBindTexture(GL_TEXTURE_2D, m_texture.texture);
-	glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, m_texture.width, m_texture.height);
+	bindFramebuffer(m_texture);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
+	glBlendEquation(GL_FUNC_ADD);
 
 	if (value.getType() == ValueType::FLOAT3)
 	{
-		GLenum err;
-		bindFramebuffer(m_texture);
+		Color3 color = value.asColor3();
 
-
-		//glClear(GL_COLOR_BUFFER_BIT);
-		//glDisable(GL_BLEND);
-		resetFrameBuffer();
-
-		return Value(Texture(m_texture));
+		glClearColor(color.r, color.g, color.b, 1.f);
+		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
-	resetFrameBuffer();
+	glBindTexture(GL_TEXTURE_2D, texture.texture);
+	glBindVertexArray(Editor::getRenderingVAO());
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);
 
-	return Value();
+	resetFrameBuffer();
+	glDisable(GL_BLEND);
+	return Value(Texture(m_texture));
 }
 
 Value Add::handleVectors(Float3 float3, Value value)
