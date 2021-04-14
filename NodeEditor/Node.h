@@ -22,6 +22,7 @@ public:
 
 protected:
     static void generateTexture(Texture& texture);
+    static void drawTexture(Texture& texture);
     static void bindFramebuffer(Texture& texture);
     static void resetFrameBuffer();
 

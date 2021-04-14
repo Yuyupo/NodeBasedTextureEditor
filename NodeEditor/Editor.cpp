@@ -13,9 +13,16 @@
 #include "ColorPicker.h"
 #include "ChannelPicker.h"
 #include "TextureLoader.h"
+
 #include "Add.h"
+#include "Multiply.h"
+#include "Subtract.h"
+
 #include "Editor.h"
 #include "Node.h"
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 
 GLuint Editor::m_renderingFrameBuffer;
 GLuint Editor::m_renderingVertexArrayObject;
@@ -143,15 +150,44 @@ void Editor::drawNodes()
                 }
                 ImGui::EndMenu();
             }
-            if (ImGui::BeginMenu("Constant Operations", ""))
+            if (ImGui::BeginMenu("Operations", ""))
             {
                 if (ImGui::MenuItem("Add", ""))
                 {
                     createNode<Add>();
                 }
+                if (ImGui::MenuItem("Subtract", ""))
+                {
+                    createNode<Subtract>();
+                }
+                if (ImGui::MenuItem("Multiply", ""))
+                {
+                    createNode<Multiply>();
+                }
                 ImGui::EndMenu();
             }
             ImGui::EndMenu();
+        }
+
+        static char m_path[128] = ".\\OutputTextures\\";
+        ImGui::InputText("\tFilename", m_path, IM_ARRAYSIZE(m_path));
+        if (ImGui::Button("Save output texture"))
+        {
+            int width = 256;
+            int height = 256;
+            static GLubyte* data = new GLubyte[4 * width * height];
+            memset(data, 0, 4 * width * height);
+            // Blit the multisample framebuffer into the regular framebuffer
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, getRenderingFrameBuffer());
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, getRenderingFrameBuffer());
+            glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+            // Read from the regular framebuffer into the data array
+            glBindFramebuffer(GL_FRAMEBUFFER, getRenderingFrameBuffer());
+            glPixelStorei(GL_PACK_ALIGNMENT, 1);
+            glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            std::cout << "Saved as: " << m_path << std::endl;
+            stbi_write_png(strcat(m_path, ".png"), width, height, 4, data, width * 4);
         }
         ImGui::EndMenuBar();
     }
@@ -305,6 +341,13 @@ void Editor::handleEvents()
             std::cout << "Link sent from: " << m_attributes[start_attr]->getParent()->getName() << "\tTo: " << m_attributes[end_attr]->getParent()->getName() << std::endl; 
             std::cout << "\tColor chosen R:" << (int)(col1.r * 255.f) << " G:" << (int)(col1.g * 255.f) << " B:" << (int)(col1.b * 255.f) << std::endl;
         }
+
+        if (m_attributes[end_attr]->getParent()->getName() == "Add")
+        {
+            Color3 col1 = m_attributes[start_attr]->getParent()->createOutput().asColor3();
+            std::cout << "Link sent from: " << m_attributes[start_attr]->getParent()->getName() << "\tTo: " << m_attributes[end_attr]->getParent()->getName() << std::endl;
+            std::cout << "\tColor chosen R:" << (int)(col1.r * 255.f) << " G:" << (int)(col1.g * 255.f) << " B:" << (int)(col1.b * 255.f) << std::endl;
+        }
     }
 
     int link_id;
@@ -353,23 +396,23 @@ void Editor::init(const char* glsl_version, GLFWwindow* window)
     imnodes::Initialize();
 
     const char* texture_display_vertex_src = R"(#version 310 es
-precision highp float;
-in vec2 aPos;
-in vec2 aTex;
-out vec2 vTex;
-void main() {
-    gl_Position = vec4(aPos, 0.0f, 1.0f);
-    vTex = aTex;
-})";
+    precision highp float;
+    in vec2 aPos;
+    in vec2 aTex;
+    out vec2 vTex;
+    void main() {
+        gl_Position = vec4(aPos, 0.0f, 1.0f);
+        vTex = aTex;
+    })";
 
     const char* texture_display_fragment_src = R"(#version 310 es
-precision highp float;
-in vec2 vTex;
-uniform sampler2D inputImage;
-out vec4 outColor;
-void main() {
-    outColor = vec4(texture(inputImage, vTex).rgb, 1.0f);
-})";
+    precision highp float;
+    in vec2 vTex;
+    uniform sampler2D inputImage;
+    out vec4 outColor;
+    void main() {
+        outColor = vec4(texture(inputImage, vTex).rgb, 1.0f);
+    })";
 
     unsigned int texture_program = createShaderProgram(texture_display_vertex_src, texture_display_fragment_src);
     glUseProgram(texture_program);
@@ -409,7 +452,6 @@ void main() {
 
 void Editor::cleanUp()
 {
-    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDeleteFramebuffers(1, &m_renderingFrameBuffer);
     glDeleteVertexArrays( 1, &m_renderingVertexArrayObject);
     glDeleteBuffers(1, &m_renderingVertexBuffer);

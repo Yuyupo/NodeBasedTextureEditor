@@ -79,9 +79,22 @@ void Node::generateTexture(Texture& texture)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // set alpha to 1.f
     std::vector<GLubyte> emptyData(texture.width * texture.height * 4, 0);
+    for (int count = 1; count < emptyData.size(); count ++)
+    {
+        if (count % 4 == 0) {
+            emptyData[count -1] = 0xFF;
+        }
+    }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.width, texture.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, emptyData.data());
+}
+
+void Node::drawTexture(Texture& texture)
+{
+    glBindTexture(GL_TEXTURE_2D, texture.texture);
+    glBindVertexArray(Editor::getRenderingVAO());
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glBindVertexArray(0);
 }
 
 void Node::bindFramebuffer(Texture& texture)

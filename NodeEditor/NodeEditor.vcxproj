@@ -175,8 +175,10 @@
     <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="libs\imnodes\imnodes.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Multiply.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Output.cpp" />
+    <ClCompile Include="Subtract.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="Value.cpp" />
   </ItemGroup>
@@ -202,13 +204,17 @@
     <ClInclude Include="libs\imgui\imstb_truetype.h" />
     <ClInclude Include="libs\imnodes\imnodes.h" />
     <ClInclude Include="libs\imnodes\stb_image.h" />
+    <ClInclude Include="Multiply.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Output.h" />
+    <ClInclude Include="stb_image_write.h" />
+    <ClInclude Include="Subtract.h" />
     <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="Value.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="C:\Users\Yuyupo\Downloads\MyImage01.jpg" />
+    <Image Include="C:\Users\Yuyupo\Downloads\MyImage02.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="libs\imgui\imgui.ini" />

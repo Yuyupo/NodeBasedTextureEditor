@@ -88,6 +88,12 @@
     <ClCompile Include="Output.cpp">
       <Filter>sources\Nodes</Filter>
     </ClCompile>
+    <ClCompile Include="Multiply.cpp">
+      <Filter>sources\Nodes\Operations</Filter>
+    </ClCompile>
+    <ClCompile Include="Subtract.cpp">
+      <Filter>sources\Nodes\Operations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Node.h">
@@ -165,9 +171,21 @@
     <ClInclude Include="Output.h">
       <Filter>sources\Nodes</Filter>
     </ClInclude>
+    <ClInclude Include="Multiply.h">
+      <Filter>sources\Nodes\Operations</Filter>
+    </ClInclude>
+    <ClInclude Include="Subtract.h">
+      <Filter>sources\Nodes\Operations</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image_write.h">
+      <Filter>includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="C:\Users\Yuyupo\Downloads\MyImage01.jpg">
+      <Filter>sources</Filter>
+    </Image>
+    <Image Include="C:\Users\Yuyupo\Downloads\MyImage02.jpg">
       <Filter>sources</Filter>
     </Image>
   </ItemGroup>
