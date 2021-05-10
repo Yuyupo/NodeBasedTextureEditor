@@ -165,6 +165,7 @@
     <ClCompile Include="ConstantFloat4.cpp" />
     <ClCompile Include="ConstantInt.cpp" />
     <ClCompile Include="Editor.cpp" />
+    <ClCompile Include="FragShader.cpp" />
     <ClCompile Include="libs\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="libs\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="libs\gl3w\GL\gl3w.c" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Multiply.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Output.cpp" />
+    <ClCompile Include="Preview.cpp" />
     <ClCompile Include="Subtract.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="Value.cpp" />
@@ -192,6 +194,7 @@
     <ClInclude Include="ConstantFloat4.h" />
     <ClInclude Include="ConstantInt.h" />
     <ClInclude Include="Editor.h" />
+    <ClInclude Include="FragShader.h" />
     <ClInclude Include="libs\backends\imgui_impl_glfw.h" />
     <ClInclude Include="libs\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="libs\gl3w\GL\gl3w.h" />
@@ -207,6 +210,7 @@
     <ClInclude Include="Multiply.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Output.h" />
+    <ClInclude Include="Preview.h" />
     <ClInclude Include="stb_image_write.h" />
     <ClInclude Include="Subtract.h" />
     <ClInclude Include="TextureLoader.h" />

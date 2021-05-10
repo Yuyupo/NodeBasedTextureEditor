@@ -1,16 +1,18 @@
 #pragma once
 #include "Node.h"
-class Output :
+class Preview :
     public Node
 {
 public:
-    Output();
-    ~Output();
+    Preview();
+    ~Preview();
 
     void createContent() override;
     Value createOutput() override;
 
 private:
+    GLuint m_previewFrameBuffer;
+
     Color3 m_color;
     Texture m_texture;
     Texture m_colorTexture;

@@ -1,17 +1,19 @@
 #pragma once
 #include "Node.h"
-class Output :
+class FragShader :
     public Node
 {
 public:
-    Output();
-    ~Output();
+    FragShader();
+    ~FragShader();
 
     void createContent() override;
     Value createOutput() override;
 
 private:
-    Color3 m_color;
+    unsigned int m_texture_program;
+    char m_customFragShader[1024 * 16];
+
     Texture m_texture;
     Texture m_colorTexture;
 };

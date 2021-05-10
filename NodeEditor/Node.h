@@ -25,6 +25,7 @@ protected:
     static void drawTexture(Texture& texture);
     static void bindFramebuffer(Texture& texture);
     static void resetFrameBuffer();
+    static void bindPreviewBuffer(Texture& texture);
 
 private:
     int m_id;

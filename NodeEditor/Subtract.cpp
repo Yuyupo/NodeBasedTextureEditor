@@ -37,7 +37,7 @@ Value Subtract::createOutput()
 		if (InputValueB.getType() == ValueType::TEXTURE)
 		{
 			glColorMask(TRUE, TRUE, TRUE, FALSE);
-			bindFramebuffer(m_texture);
+			bindPreviewBuffer(m_texture);
 
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_ONE, GL_ONE);

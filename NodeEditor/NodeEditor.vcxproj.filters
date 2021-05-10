@@ -94,6 +94,12 @@
     <ClCompile Include="Subtract.cpp">
       <Filter>sources\Nodes\Operations</Filter>
     </ClCompile>
+    <ClCompile Include="Preview.cpp">
+      <Filter>sources\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="FragShader.cpp">
+      <Filter>sources\Nodes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Node.h">
@@ -179,6 +185,12 @@
     </ClInclude>
     <ClInclude Include="stb_image_write.h">
       <Filter>includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Preview.h">
+      <Filter>sources\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="FragShader.h">
+      <Filter>sources\Nodes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

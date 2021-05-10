@@ -13,6 +13,9 @@
 #include "ColorPicker.h"
 #include "ChannelPicker.h"
 #include "TextureLoader.h"
+#include "Preview.h"
+
+#include "FragShader.h"
 
 #include "Add.h"
 #include "Multiply.h"
@@ -25,61 +28,49 @@
 #include "stb_image_write.h"
 
 GLuint Editor::m_renderingFrameBuffer;
+GLuint Editor::m_previewFrameBuffer;
 GLuint Editor::m_renderingVertexArrayObject;
 GLuint Editor::m_renderingVertexBuffer;
+unsigned int Editor::m_defaultShaderProgram;
 std::vector<Attribute*> Editor::m_attributes;
 std::vector<Node*> Editor::m_nodes;
 std::vector<std::pair<int, int>> Editor::m_links;
 bool Editor::active_menu = true;
 
-static unsigned int createShaderProgram(const char* vertex_src, const char* fragment_src) {
-    // X.1. Create the vertex shader.
+unsigned int Editor::createShaderProgram(const char* vertex_src, const char* fragment_src) {
     unsigned int vertex_shader;
     {
-        // X.1.1. Create a vertex shader object.
         vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-
-        // X.1.2. Specify the shader source.
         glShaderSource(vertex_shader, 1, &vertex_src, NULL);
-
-        // X.1.3. Compile the shader.
         glCompileShader(vertex_shader);
 
-        // X.1.4. Check if there is any error during compilation.
         int success;
         glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
         if (!success) {
             char info[512];
             glGetShaderInfoLog(vertex_shader, 512, NULL, info);
-            printf("Vertex shader error:\n%s\n", info);
-            exit(-3);
+            std::cout << "Vertex shader error: " << info << std::endl;
+            return 0;
         }
     }
 
-    // X.2. Create the fragment shader.
     unsigned int fragment_shader;
     {
-        // X.2.1. Create a fragment shader object.
         fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
-        // X.2.2. Specify the shader source.
         glShaderSource(fragment_shader, 1, &fragment_src, NULL);
-
-        // X.2.3. Compile the shader.
         glCompileShader(fragment_shader);
 
-        // X.2.4. Check if there is any error during compilation.
         int success;
         glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
         if (!success) {
             char info[512];
             glGetShaderInfoLog(fragment_shader, 512, NULL, info);
-            printf("Fragment shader error:\n%s\n", info);
-            exit(-3);
+            std::cout << "Fragment shader error: " << info << std::endl;
+            return 0;
         }
     }
 
-    // X.3. Create a shader program and attach the vertex/fragment shaders.
     unsigned int shader_program;
     {
         shader_program = glCreateProgram();
@@ -92,18 +83,19 @@ static unsigned int createShaderProgram(const char* vertex_src, const char* frag
         if (!success) {
             char info[512];
             glGetProgramInfoLog(shader_program, 512, NULL, info);
-            printf("Program error:\n%s\n", info);
-            exit(-3);
+            std::cout << "Program error: " << info << std::endl;
+            return 0;
         }
     }
 
-    // X.4. The vertex and fragment shaders can be removed after linking.
-    {
-        glDeleteShader(vertex_shader);
-        glDeleteShader(fragment_shader);
-    }
-
+    glDeleteShader(vertex_shader);
+    glDeleteShader(fragment_shader);
     return shader_program;
+}
+
+unsigned int Editor::getDefaultShaderProgram()
+{
+    return m_defaultShaderProgram;
 }
 
 void Editor::drawNodes()
@@ -124,11 +116,19 @@ void Editor::drawNodes()
             }
             if (ImGui::MenuItem("Color channel picker", ""))
             {
-                Node* n = createNode<ChannelPicker>();
+                createNode<ChannelPicker>();
             }
             if (ImGui::MenuItem("Texture loader", ""))
             { 
                 createNode<TextureLoader>();
+            }
+            if (ImGui::MenuItem("Preview", ""))
+            {
+                createNode<Preview>();
+            }
+            if (ImGui::MenuItem("Fragment Shader", ""))
+            {
+                createNode<FragShader>();
             }
             if (ImGui::BeginMenu("Constants", ""))
             {
@@ -173,6 +173,7 @@ void Editor::drawNodes()
         ImGui::InputText("\tFilename", m_path, IM_ARRAYSIZE(m_path));
         if (ImGui::Button("Save output texture"))
         {
+
             int width = 256;
             int height = 256;
             static GLubyte* data = new GLubyte[4 * width * height];
@@ -285,6 +286,11 @@ void Editor::deleteNode(int id)
 GLuint Editor::getRenderingFrameBuffer()
 {
     return m_renderingFrameBuffer;
+}
+
+GLuint Editor::getPreviewFrameBuffer()
+{
+    return m_previewFrameBuffer;
 }
 
 GLuint Editor::getRenderingVAO()
@@ -414,18 +420,19 @@ void Editor::init(const char* glsl_version, GLFWwindow* window)
         outColor = vec4(texture(inputImage, vTex).rgb, 1.0f);
     })";
 
-    unsigned int texture_program = createShaderProgram(texture_display_vertex_src, texture_display_fragment_src);
-    glUseProgram(texture_program);
+    m_defaultShaderProgram = createShaderProgram(texture_display_vertex_src, texture_display_fragment_src);
+    glUseProgram(m_defaultShaderProgram);
 
     glGenFramebuffers(1, &m_renderingFrameBuffer);
+    glGenFramebuffers(2, &m_previewFrameBuffer);
 
     glGenBuffers(1, &m_renderingVertexBuffer);
     glGenVertexArrays(1, &m_renderingVertexArrayObject);
     glBindVertexArray(m_renderingVertexArrayObject);
     glBindBuffer(GL_ARRAY_BUFFER, m_renderingVertexBuffer);
 
-    int aPosLoc = glGetAttribLocation(texture_program, "aPos");
-    int aTexLoc = glGetAttribLocation(texture_program, "aTex");
+    int aPosLoc = glGetAttribLocation(m_defaultShaderProgram, "aPos");
+    int aTexLoc = glGetAttribLocation(m_defaultShaderProgram, "aTex");
 
     // Vertex coords
     glVertexAttribPointer(aPosLoc, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), nullptr);
@@ -453,6 +460,7 @@ void Editor::init(const char* glsl_version, GLFWwindow* window)
 void Editor::cleanUp()
 {
     glDeleteFramebuffers(1, &m_renderingFrameBuffer);
+    glDeleteFramebuffers(2, &m_previewFrameBuffer);
     glDeleteVertexArrays( 1, &m_renderingVertexArrayObject);
     glDeleteBuffers(1, &m_renderingVertexBuffer);
 

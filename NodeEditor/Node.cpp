@@ -109,6 +109,13 @@ void Node::resetFrameBuffer()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void Node::bindPreviewBuffer(Texture& texture)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, Editor::getPreviewFrameBuffer());
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.texture, 0);
+    glViewport(0, 0, texture.width, texture.height);
+}
+
 
 
 

@@ -5,9 +5,8 @@
 Output::Output()
 	: Node("Output")
 	, m_color{ 0.f, 0.f, 0.f }
-	, m_texture { 50.f, 50.f, 0}
+	, m_texture { 256.f, 256.f, 0}
 	, m_colorTexture {256.f, 256.f, 0}
-	, m_fb (Editor::getRenderingFrameBuffer())
 {
 	// m_texture comes from outside
 	generateTexture(m_colorTexture);

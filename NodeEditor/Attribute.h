@@ -3,8 +3,6 @@
 
 class Node;
 
-// float2/3 err -> text boxban error?
-
 class Attribute
 {
 public:
